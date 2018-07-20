@@ -65,9 +65,9 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
     //HAs to be different for two panel
     @Override
     public void onListItemClick(int id) {
-        /*Intent intentToEnterStep = new Intent(this,StepActivity.class);
+        Intent intentToEnterStep = new Intent(this,StepActivity.class);
         intentToEnterStep.putParcelableArrayListExtra(getResources().getString(R.string.STEPS_LIST), recipe.getSteps());
         intentToEnterStep.putExtra(getResources().getString(R.string.STEP_ID), id);
-        startActivity(intentToEnterStep);*/
+        startActivity(intentToEnterStep);
     }
 }
