@@ -1,6 +1,7 @@
 package com.example.bakingapp.ui;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,10 +17,12 @@ import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity implements DetailAdapter.ListItemClickListener{
 
-    private Boolean twoPane;
+    private Boolean twoPane=false;
     Recipe recipe;
     TextView ingredientTextView;
     RecyclerView recyclerView;
+    int stepId=0;
+    StepFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +30,6 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
         setContentView(R.layout.activity_detail);
         ingredientTextView = findViewById(R.id.detail_ingredients_tv);
         recyclerView = findViewById(R.id.rv_details_list);
-        if (findViewById(R.id.details_frame_layout) != null){
-            twoPane = true;
-        }
 
         Intent intent = getIntent();
         if(intent.hasExtra(getResources().getString(R.string.RECIPE_OBJECT))){
@@ -40,6 +40,17 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
                 setSteps();
             }
         }
+
+        if (findViewById(R.id.details_frame_layout) != null){
+            twoPane = true;
+            fragment = new StepFragment();
+            String description = recipe.getSteps().get(stepId).getDescription();
+            fragment.setStep(description);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().add(R.id.details_frame_layout, fragment).commit();
+        }
+
+
     }
 
     private void setIngredients(){
@@ -65,9 +76,26 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
     //HAs to be different for two panel
     @Override
     public void onListItemClick(int id) {
-        Intent intentToEnterStep = new Intent(this,StepActivity.class);
-        intentToEnterStep.putParcelableArrayListExtra(getResources().getString(R.string.STEPS_LIST), recipe.getSteps());
-        intentToEnterStep.putExtra(getResources().getString(R.string.STEP_ID), id);
-        startActivity(intentToEnterStep);
+        if(!twoPane){
+            Intent intentToEnterStep = new Intent(this,StepActivity.class);
+            intentToEnterStep.putParcelableArrayListExtra(getResources().getString(R.string.STEPS_LIST), recipe.getSteps());
+            intentToEnterStep.putExtra(getResources().getString(R.string.STEP_ID), id);
+            startActivity(intentToEnterStep);
+        }
+        else {
+            this.stepId = id;
+            String description = recipe.getSteps().get(stepId).getDescription();
+            StepFragment newFragment = new StepFragment();
+            newFragment.setStep(description);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.details_frame_layout, newFragment).commit();
+        }
+    }
+
+    public void setFrame(){
+        String description = recipe.getSteps().get(stepId).getDescription();
+        fragment.setStep(description);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.details_frame_layout, fragment).commit();
     }
 }

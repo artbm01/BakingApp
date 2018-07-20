@@ -6,9 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.StepActivity">
 
-    <fragment
+    <FrameLayout
         android:id="@+id/step_fragment"
-        android:name="com.example.bakingapp.ui.StepFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

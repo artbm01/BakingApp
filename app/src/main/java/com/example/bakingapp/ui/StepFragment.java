@@ -12,7 +12,7 @@ import com.example.bakingapp.R;
 
 public class StepFragment extends Fragment{
 
-    TextView description;
+    String descriptionText;
 
     public StepFragment(){}
 
@@ -20,10 +20,16 @@ public class StepFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        final View rootView = inflater.inflate(R.layout.fragment_step, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_step, container, false);
 
-        description = rootView.findViewById(R.id.step_description_tv);
+        final TextView description = rootView.findViewById(R.id.step_description_tv);
+        description.setText(descriptionText);
+
 
         return rootView;
+    }
+
+    public void setStep(String descriptionText){
+        this.descriptionText = descriptionText;
     }
 }
