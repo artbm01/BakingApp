@@ -1,5 +1,6 @@
 package com.example.bakingapp.ui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,6 +31,10 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.L
 
     @Override
     public void onListItemClick(Recipe recipe) {
-
+        Intent intent = new Intent(this, DetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(getResources().getString(R.string.RECIPE_OBJECT), recipe);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }
