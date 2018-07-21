@@ -6,7 +6,7 @@
     android:id="@+id/fragment_details">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="400dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
