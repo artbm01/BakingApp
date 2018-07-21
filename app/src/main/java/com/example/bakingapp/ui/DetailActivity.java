@@ -11,17 +11,16 @@ import com.example.bakingapp.R;
 import com.example.bakingapp.adapters.DetailAdapter;
 import com.example.bakingapp.models.Ingredient;
 import com.example.bakingapp.models.Recipe;
-
 import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity implements DetailAdapter.ListItemClickListener{
 
     private Boolean twoPane=false;
-    Recipe recipe;
-    TextView ingredientTextView;
-    RecyclerView recyclerView;
-    int stepId=0;
-    StepFragment fragment;
+    private Recipe recipe;
+    private TextView ingredientTextView;
+    private RecyclerView recyclerView;
+    private int stepId=0;
+    private StepFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +55,14 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
     }
 
     private void setIngredients(){
-        String tv = "Ingredients \n\n";
+        StringBuilder tv = new StringBuilder("Ingredients \n\n");
         ArrayList<Ingredient> ingredients = recipe.getIngredients();
         for (int i=0; i<ingredients.size(); i++){
             String ingredient = ingredients.get(i).getIngredient() + ": " + ingredients.get(i).getQuantity() + " " + ingredients.get(i).getMeasure() + "\n";
-            tv = tv + ingredient;
+            tv.append(ingredient);
         }
-        tv += "\nSteps\n";
-        ingredientTextView.setText(tv);
+        tv.append("\nSteps\n");
+        ingredientTextView.setText(tv.toString());
     }
 
     private void setSteps(){

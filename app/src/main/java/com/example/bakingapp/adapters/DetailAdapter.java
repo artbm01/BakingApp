@@ -43,10 +43,10 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView recipeStep;
-        private TextView recipeNumber;
+        private final TextView recipeStep;
+        private final TextView recipeNumber;
 
-        public MyViewHolder(View itemView) {
+        private MyViewHolder(View itemView) {
             super(itemView);
             recipeStep = itemView.findViewById(R.id.rv_step_tv);
             recipeNumber = itemView.findViewById(R.id.rv_step_number_tv);

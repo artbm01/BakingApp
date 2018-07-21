@@ -16,16 +16,16 @@ public class Recipe implements Parcelable{
         this.image = image;
     }
 
-    private String id;
-    private String name;
-    private ArrayList<Ingredient> ingredients;
-    private ArrayList<Step> steps;
-    private String servings;
-    private String image;
+    private final String id;
+    private final String name;
+    private final ArrayList<Ingredient> ingredients;
+    private final ArrayList<Step> steps;
+    private final String servings;
+    private final String image;
 
 
     @SuppressWarnings("unchecked")
-    protected Recipe(Parcel in) {
+    private Recipe(Parcel in) {
         id = in.readString();
         name = in.readString();
         ingredients = in.readArrayList(com.example.bakingapp.models.Step.class.getClassLoader());

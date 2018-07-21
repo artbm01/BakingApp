@@ -9,7 +9,7 @@ public class Ingredient implements Parcelable{
     private String measure;
     private String ingredient;
 
-    public Ingredient(){};
+    public Ingredient(){}
 
     public Ingredient(float quantity, String measure, String ingredient) {
         this.quantity = quantity;
@@ -58,7 +58,7 @@ public class Ingredient implements Parcelable{
         }
     };
 
-    protected Ingredient(Parcel in) {
+    private Ingredient(Parcel in) {
         quantity = in.readFloat();
         measure = in.readString();
         ingredient = in.readString();

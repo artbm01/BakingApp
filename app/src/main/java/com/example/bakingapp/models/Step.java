@@ -3,8 +3,6 @@ package com.example.bakingapp.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-
 public class Step implements Parcelable{
 
     private int id;
@@ -13,7 +11,7 @@ public class Step implements Parcelable{
     private String videoUrl;
     private String thumbnailUrl;
 
-    public Step(){};
+    public Step(){}
 
     public Step(int id, String shortDescription, String description, String videoUrl, String thumbnailUrl) {
         this.id = id;
@@ -81,7 +79,7 @@ public class Step implements Parcelable{
         }
     };
 
-    protected Step(Parcel in) {
+    private Step(Parcel in) {
         id = in.readInt();
         shortDescription = in.readString();
         description = in.readString();

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder>{
 
-    private ArrayList<Recipe> recipes;
+    private final ArrayList<Recipe> recipes;
     private final ListItemClickListener listItemClickListener;
 
     public RecipeAdapter(Context context, ListItemClickListener listItemClickListener){
@@ -27,10 +27,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView recipeTitle;
-        private TextView quantity;
+        private final TextView recipeTitle;
+        private final TextView quantity;
 
-        public MyViewHolder(View itemView) {
+        private MyViewHolder(View itemView) {
             super(itemView);
             recipeTitle = itemView.findViewById(R.id.rv_recipe_name_tv);
             quantity = itemView.findViewById(R.id.rv_servings_quantity_tv);

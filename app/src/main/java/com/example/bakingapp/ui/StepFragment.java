@@ -1,6 +1,7 @@
 package com.example.bakingapp.ui;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -22,22 +23,24 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
+import java.util.Objects;
+
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
 public class StepFragment extends Fragment{
 
-    String descriptionText;
-    long playbackPosition = 0;
-    int currentWindow = 0;
-    boolean playWhenReady = true;
-    String videoUrl;
-    SimpleExoPlayer player;
+    private String descriptionText;
+    private long playbackPosition = 0;
+    private int currentWindow = 0;
+    private boolean playWhenReady = true;
+    private String videoUrl;
+    private SimpleExoPlayer player;
 
     public StepFragment(){}
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         getVideoUrl();
 
@@ -48,7 +51,7 @@ public class StepFragment extends Fragment{
         description.setVisibility(View.VISIBLE);
         description.setText(descriptionText);
 
-        if (videoUrl=="" || videoUrl.trim().isEmpty()){
+        if (Objects.equals(videoUrl, "") || videoUrl.trim().isEmpty()){
         } else {
             playerView.setVisibility(View.VISIBLE);
 
@@ -68,7 +71,7 @@ public class StepFragment extends Fragment{
         this.descriptionText = descriptionText;
     }
 
-    public void startPlayer(PlayerView playerView){
+    private void startPlayer(PlayerView playerView){
         player = ExoPlayerFactory.newSimpleInstance(
                 new DefaultRenderersFactory(getContext()),
                 new DefaultTrackSelector(), new DefaultLoadControl());

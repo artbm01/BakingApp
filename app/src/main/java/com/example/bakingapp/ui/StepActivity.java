@@ -5,21 +5,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
 import com.example.bakingapp.R;
 import com.example.bakingapp.models.Step;
-
 import java.util.ArrayList;
-
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
 public class StepActivity extends AppCompatActivity {
 
     private ArrayList<Step> stepsList;
-    int id;
-    Button nextButton;
-    Button previousButton;
-    String videoUrl;
+    private int id;
+    private Button nextButton;
+    private Button previousButton;
+    private String videoUrl;
 
 
     @Override
@@ -95,7 +92,7 @@ public class StepActivity extends AppCompatActivity {
         nextButton.setVisibility(View.GONE);
     }
 
-    public Bundle shareVideoUrl(){
+    private Bundle shareVideoUrl(){
         Bundle bundle = new Bundle();
         bundle.putString(getString(R.string.VIDEO_URL),videoUrl);
         return bundle;

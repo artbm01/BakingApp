@@ -5,12 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
 import com.example.bakingapp.R;
 import com.example.bakingapp.adapters.RecipeAdapter;
 import com.example.bakingapp.models.Recipe;
-
-import static java.security.AccessController.getContext;
 
 public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.ListItemClickListener{
 

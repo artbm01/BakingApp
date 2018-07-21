@@ -32,7 +32,7 @@ public class JsonUtils{
     private static final String THUMBNAIL = "thumbnailURL";
 
     public static String loadJSONFromAsset(Context context) {
-        String json = null;
+        String json;
         try {
             InputStream is = context.getAssets().open(JSONFILENAME);
             int size = is.available();
@@ -49,12 +49,12 @@ public class JsonUtils{
 
     public static ArrayList<Recipe> parseJsonRecipes(String json){
         if (json != null){
-            String id=null;
-            String name=null;
-            ArrayList<Ingredient> ingredients = new ArrayList<>();
-            ArrayList<Step> steps=new ArrayList<>();
-            String servings=null;
-            String image=null;
+            String id;
+            String name;
+            ArrayList<Ingredient> ingredients;
+            ArrayList<Step> steps;
+            String servings;
+            String image;
 
             try{
                 ArrayList<Recipe> jsonToRecipe = new ArrayList<>();
