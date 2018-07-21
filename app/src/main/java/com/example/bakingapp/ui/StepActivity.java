@@ -1,26 +1,17 @@
 package com.example.bakingapp.ui;
 
-import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.bakingapp.R;
 import com.example.bakingapp.models.Step;
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
 import java.util.ArrayList;
+
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
 public class StepActivity extends AppCompatActivity {
 
@@ -28,34 +19,91 @@ public class StepActivity extends AppCompatActivity {
     int id;
     Button nextButton;
     Button previousButton;
+    String videoUrl;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step);
+
         previousButton = findViewById(R.id.previous_button);
         nextButton = findViewById(R.id.next_button);
 
-        id = getIntent().getIntExtra(getResources().getString(R.string.STEP_ID),0);
+        if(savedInstanceState != null){
+            id = savedInstanceState.getInt(getString(R.string.VIDEO_ID));
+        } else{
+            id = getIntent().getIntExtra(getResources().getString(R.string.STEP_ID),0);
+        }
         stepsList = getIntent().getParcelableArrayListExtra(getResources().getString(R.string.STEPS_LIST));
 
         StepFragment fragment = new StepFragment();
         fragment.setStep(stepsList.get(id).getDescription());
-        fragment.setVideoUrl(stepsList.get(id).getVideoUrl());
-
+        videoUrl = stepsList.get(id).getVideoUrl();
+        //fragment.setVideoUrl(stepsList.get(id).getVideoUrl());
+        Bundle b = shareVideoUrl();
+        fragment.setArguments(b);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.step_fragment, fragment).commit();
 
+        prepareButtons();
 
-        if(stepsList.size() == (id+1)){
-            nextButton.setVisibility(View.GONE);
+        if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE){
+            hideButtons();
+            getSupportActionBar().hide();
         }
-        if(id==0){
-            previousButton.setVisibility(View.GONE);
-        }
-
     }
 
+    public void OnClickNext(View v){
+        id = id + 1;
+        refreshView();
+    }
+    public void OnClickPrevious(View v){
+        id = id - 1;
+        refreshView();
+    }
 
+    private void refreshView(){
+        StepFragment newFragment = new StepFragment();
+        newFragment.setStep(stepsList.get(id).getDescription());
+        videoUrl = stepsList.get(id).getVideoUrl();
+        Bundle b = shareVideoUrl();
+        newFragment.setArguments(b);
+        //newFragment.setVideoUrl(videoUrl);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.step_fragment, newFragment).commit();
+        prepareButtons();
+    }
+
+    private void prepareButtons(){
+        if(stepsList.size()-1 == id){
+            nextButton.setVisibility(View.GONE);
+            previousButton.setVisibility(View.VISIBLE);
+        }
+        else if(id==0){
+            previousButton.setVisibility(View.GONE);
+            nextButton.setVisibility(View.VISIBLE);
+        }
+        else{
+            nextButton.setVisibility(View.VISIBLE);
+            previousButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideButtons(){
+        previousButton.setVisibility(View.GONE);
+        nextButton.setVisibility(View.GONE);
+    }
+
+    public Bundle shareVideoUrl(){
+        Bundle bundle = new Bundle();
+        bundle.putString(getString(R.string.VIDEO_URL),videoUrl);
+        return bundle;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(getString(R.string.VIDEO_ID), id);
+        super.onSaveInstanceState(outState);
+    }
 }

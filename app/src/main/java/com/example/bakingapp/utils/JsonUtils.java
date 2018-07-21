@@ -81,9 +81,6 @@ public class JsonUtils{
                         String shortDescription = step.getString(SHORT_DESCRIPTION);
                         String description = step.getString(DESCRIPTION);
                         String videoURL = step.getString(VIDEO);
-                        if (videoURL==""){
-                            videoURL = "NULL";
-                        }
                         String thumbnail = step.getString(THUMBNAIL);
                         Step stepObject = new Step(Integer.parseInt(stepId), shortDescription, description, videoURL, thumbnail);
                         steps.add(stepObject);

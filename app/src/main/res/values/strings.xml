@@ -5,4 +5,6 @@
     <string name="STEPS_LIST">steps_list</string>
     <string name="next_step">Next Step</string>
     <string name="previous_step">Previous Step</string>
+    <string name="VIDEO_URL">video_url</string>
+    <string name="VIDEO_ID">video_id</string>
 </resources>

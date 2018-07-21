@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
-
 import com.example.bakingapp.R;
 import com.example.bakingapp.adapters.DetailAdapter;
 import com.example.bakingapp.models.Ingredient;
@@ -46,7 +45,9 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
             fragment = new StepFragment();
             String description = recipe.getSteps().get(stepId).getDescription();
             fragment.setStep(description);
-            fragment.setVideoUrl(recipe.getSteps().get(stepId).getVideoUrl());
+            Bundle bundle = new Bundle();
+            bundle.putString(getString(R.string.VIDEO_URL),recipe.getSteps().get(stepId).getVideoUrl());
+            fragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().add(R.id.details_frame_layout, fragment).commit();
         }
@@ -88,7 +89,10 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
             String description = recipe.getSteps().get(stepId).getDescription();
             StepFragment newFragment = new StepFragment();
             newFragment.setStep(description);
-            newFragment.setVideoUrl(recipe.getSteps().get(stepId).getVideoUrl());
+            Bundle bundle = new Bundle();
+            bundle.putString(getString(R.string.VIDEO_URL),recipe.getSteps().get(stepId).getVideoUrl());
+            newFragment.setArguments(bundle);
+            //newFragment.setVideoUrl(recipe.getSteps().get(stepId).getVideoUrl());
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.details_frame_layout, newFragment).commit();
         }

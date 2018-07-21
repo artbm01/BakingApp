@@ -1,6 +1,7 @@
 package com.example.bakingapp.ui;
 
 import android.net.Uri;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,6 +22,8 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+
 public class StepFragment extends Fragment{
 
     String descriptionText;
@@ -28,6 +31,7 @@ public class StepFragment extends Fragment{
     int currentWindow = 0;
     boolean playWhenReady = true;
     String videoUrl;
+    SimpleExoPlayer player;
 
     public StepFragment(){}
 
@@ -35,14 +39,26 @@ public class StepFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_step, container, false);
+        getVideoUrl();
 
+        View rootView = inflater.inflate(R.layout.fragment_step, container, false);
+        final PlayerView playerView = rootView.findViewById(R.id.player_view);
         final TextView description = rootView.findViewById(R.id.step_description_tv);
+
+        description.setVisibility(View.VISIBLE);
         description.setText(descriptionText);
+
         if (videoUrl=="" || videoUrl.trim().isEmpty()){
         } else {
-            final PlayerView playerView = rootView.findViewById(R.id.player_view);
             playerView.setVisibility(View.VISIBLE);
+
+            if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
+                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) playerView.getLayoutParams();
+                params.width = params.MATCH_PARENT;
+                params.height = params.MATCH_PARENT;
+                playerView.setLayoutParams(params);
+            }
+
             startPlayer(playerView);
         }
         return rootView;
@@ -52,12 +68,7 @@ public class StepFragment extends Fragment{
         this.descriptionText = descriptionText;
     }
 
-    public void setVideoUrl(String videoUrl){
-        this.videoUrl = videoUrl;
-    }
-
     public void startPlayer(PlayerView playerView){
-        SimpleExoPlayer player;
         player = ExoPlayerFactory.newSimpleInstance(
                 new DefaultRenderersFactory(getContext()),
                 new DefaultTrackSelector(), new DefaultLoadControl());
@@ -75,4 +86,27 @@ public class StepFragment extends Fragment{
                 new DefaultHttpDataSourceFactory("exoplayer-codelab")).
                 createMediaSource(uri);
     }
+
+    private void releasePlayer() {
+        if (player != null) {
+            playbackPosition = player.getCurrentPosition();
+            currentWindow = player.getCurrentWindowIndex();
+            playWhenReady = player.getPlayWhenReady();
+            player.release();
+            player = null;
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.v("tester", "destroyer");
+        super.onDestroyView();
+        releasePlayer();
+    }
+
+    private void getVideoUrl(){
+        Bundle b = getArguments();
+        videoUrl = b.getString(getString(R.string.VIDEO_URL));
+    }
+
 }
