@@ -1,6 +1,7 @@
 package com.example.bakingapp.ui;
 
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,12 +18,15 @@ public class StepActivity extends AppCompatActivity {
     private Button nextButton;
     private Button previousButton;
     private String videoUrl;
-
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step);
+
+        name = getIntent().getStringExtra(getString(R.string.NAME));
+        handleActionBar();
 
         previousButton = findViewById(R.id.previous_button);
         nextButton = findViewById(R.id.next_button);
@@ -37,7 +41,6 @@ public class StepActivity extends AppCompatActivity {
         StepFragment fragment = new StepFragment();
         fragment.setStep(stepsList.get(id).getDescription());
         videoUrl = stepsList.get(id).getVideoUrl();
-        //fragment.setVideoUrl(stepsList.get(id).getVideoUrl());
         Bundle b = shareVideoUrl();
         fragment.setArguments(b);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -66,7 +69,6 @@ public class StepActivity extends AppCompatActivity {
         videoUrl = stepsList.get(id).getVideoUrl();
         Bundle b = shareVideoUrl();
         newFragment.setArguments(b);
-        //newFragment.setVideoUrl(videoUrl);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.step_fragment, newFragment).commit();
         prepareButtons();
@@ -102,5 +104,13 @@ public class StepActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt(getString(R.string.VIDEO_ID), id);
         super.onSaveInstanceState(outState);
+    }
+
+    private void handleActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(name);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 }

@@ -32,7 +32,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull DetailAdapter.MyViewHolder holder, int position) {
-        holder.recipeStep.setText(steps.get(position).getDescription());
+        holder.recipeStep.setText(steps.get(position).getShortDescription());
         holder.recipeNumber.setText(String.valueOf(position+1));
     }
 

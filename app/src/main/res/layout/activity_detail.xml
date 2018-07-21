@@ -3,17 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/fragment_details">
+    android:id="@+id/fragment_details"
+    android:layout_margin="8dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ingredient_tv"
+        android:layout_margin="8dp"/>
 
     <TextView
         android:id="@+id/detail_ingredients_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         android:textSize="16sp"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/steps_tv"/>
+
     <android.support.v7.widget.RecyclerView
-        android:layout_margin="8dp"
         android:id="@+id/rv_details_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

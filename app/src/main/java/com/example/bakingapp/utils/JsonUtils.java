@@ -69,6 +69,7 @@ public class JsonUtils{
                         JSONObject ing = ingredientsJson.getJSONObject(j);
                         String measure = ing.getString(MEASURE);
                         String ingredient = ing.getString(INGREDIENT);
+                        ingredient = ingredient.substring(0,1).toUpperCase() + ingredient.substring(1);
                         String quantity = ing.getString(QUANTITY);
                         Ingredient ingredientObject = new Ingredient(Float.parseFloat(quantity), measure, ingredient);
                         ingredients.add(ingredientObject);

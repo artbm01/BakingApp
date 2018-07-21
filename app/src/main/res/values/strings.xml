@@ -8,4 +8,7 @@
     <string name="VIDEO_URL">video_url</string>
     <string name="VIDEO_ID">video_id</string>
     <string name="servings">Servings:</string>
+    <string name="ingredient_tv">Ingredient</string>
+    <string name="steps_tv">Steps</string>
+    <string name="NAME">recipe_name</string>
 </resources>

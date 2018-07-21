@@ -3,6 +3,7 @@ package com.example.bakingapp.ui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import com.example.bakingapp.R;
@@ -15,11 +16,15 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recipe_activity);
-
         RecyclerView recyclerView = findViewById(R.id.rv_recipes_list);
         RecipeAdapter listAdapter = new RecipeAdapter(this, this);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager;
+        if(findViewById(R.id.two_pane) != null){
+            layoutManager = new GridLayoutManager(this, 3);
+        } else{
+            layoutManager = new LinearLayoutManager(this);
+        }
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(listAdapter);

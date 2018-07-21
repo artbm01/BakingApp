@@ -2,10 +2,12 @@ package com.example.bakingapp.ui;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.TextView;
 import com.example.bakingapp.R;
 import com.example.bakingapp.adapters.DetailAdapter;
@@ -34,6 +36,7 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
             Bundle bundle = intent.getExtras();
             if (bundle!=null){
                 recipe = bundle.getParcelable(getResources().getString(R.string.RECIPE_OBJECT));
+                handleActionBar();
                 setIngredients();
                 setSteps();
             }
@@ -50,18 +53,17 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().add(R.id.details_frame_layout, fragment).commit();
         }
-
-
     }
 
     private void setIngredients(){
-        StringBuilder tv = new StringBuilder("Ingredients \n\n");
+        StringBuilder tv = new StringBuilder();
         ArrayList<Ingredient> ingredients = recipe.getIngredients();
         for (int i=0; i<ingredients.size(); i++){
-            String ingredient = ingredients.get(i).getIngredient() + ": " + ingredients.get(i).getQuantity() + " " + ingredients.get(i).getMeasure() + "\n";
+            String ingredient = "  - "+ingredients.get(i).getIngredient() + ": "
+                    + "(" + ingredients.get(i).getQuantity() + " "
+                    + ingredients.get(i).getMeasure() + ")" + "\n";
             tv.append(ingredient);
         }
-        tv.append("\nSteps\n");
         ingredientTextView.setText(tv.toString());
     }
 
@@ -74,13 +76,13 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
         adapter.notifyDataSetChanged();
     }
 
-    //HAs to be different for two panel
     @Override
     public void onListItemClick(int id) {
         if(!twoPane){
             Intent intentToEnterStep = new Intent(this,StepActivity.class);
             intentToEnterStep.putParcelableArrayListExtra(getResources().getString(R.string.STEPS_LIST), recipe.getSteps());
             intentToEnterStep.putExtra(getResources().getString(R.string.STEP_ID), id);
+            intentToEnterStep.putExtra(getResources().getString(R.string.NAME), recipe.getName());
             startActivity(intentToEnterStep);
         }
         else {
@@ -91,16 +93,16 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
             Bundle bundle = new Bundle();
             bundle.putString(getString(R.string.VIDEO_URL),recipe.getSteps().get(stepId).getVideoUrl());
             newFragment.setArguments(bundle);
-            //newFragment.setVideoUrl(recipe.getSteps().get(stepId).getVideoUrl());
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.details_frame_layout, newFragment).commit();
         }
     }
 
-    public void setFrame(){
-        String description = recipe.getSteps().get(stepId).getDescription();
-        fragment.setStep(description);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.details_frame_layout, fragment).commit();
+    private void handleActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(recipe.getName());
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 }
