@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ public class StepFragment extends Fragment{
     long playbackPosition = 0;
     int currentWindow = 0;
     boolean playWhenReady = true;
+    String videoUrl;
 
     public StepFragment(){}
 
@@ -37,14 +39,21 @@ public class StepFragment extends Fragment{
 
         final TextView description = rootView.findViewById(R.id.step_description_tv);
         description.setText(descriptionText);
-        final PlayerView playerView = rootView.findViewById(R.id.player_view);
-        startPlayer(playerView);
-
+        if (videoUrl=="" || videoUrl.trim().isEmpty()){
+        } else {
+            final PlayerView playerView = rootView.findViewById(R.id.player_view);
+            playerView.setVisibility(View.VISIBLE);
+            startPlayer(playerView);
+        }
         return rootView;
     }
 
     public void setStep(String descriptionText){
         this.descriptionText = descriptionText;
+    }
+
+    public void setVideoUrl(String videoUrl){
+        this.videoUrl = videoUrl;
     }
 
     public void startPlayer(PlayerView playerView){
@@ -57,7 +66,7 @@ public class StepFragment extends Fragment{
 
         player.setPlayWhenReady(playWhenReady);
         player.seekTo(currentWindow, playbackPosition);
-        Uri uri = Uri.parse("http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4");
+        Uri uri = Uri.parse(videoUrl);
         MediaSource mediaSource = buildMediaSource(uri);
         player.prepare(mediaSource, true, false);
     }

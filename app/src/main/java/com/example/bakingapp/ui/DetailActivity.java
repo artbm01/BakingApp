@@ -46,6 +46,7 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
             fragment = new StepFragment();
             String description = recipe.getSteps().get(stepId).getDescription();
             fragment.setStep(description);
+            fragment.setVideoUrl(recipe.getSteps().get(stepId).getVideoUrl());
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().add(R.id.details_frame_layout, fragment).commit();
         }
@@ -87,6 +88,7 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
             String description = recipe.getSteps().get(stepId).getDescription();
             StepFragment newFragment = new StepFragment();
             newFragment.setStep(description);
+            newFragment.setVideoUrl(recipe.getSteps().get(stepId).getVideoUrl());
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.details_frame_layout, newFragment).commit();
         }

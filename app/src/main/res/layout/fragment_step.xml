@@ -11,7 +11,8 @@
         app:layout_constraintBottom_toTopOf="@id/step_description_tv"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/step_description_tv"
