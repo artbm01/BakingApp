@@ -8,6 +8,8 @@
         android:id="@+id/player_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:fastforward_increment="1000"
+        app:rewind_increment="1000"/>
         app:layout_constraintBottom_toTopOf="@id/step_description_tv"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

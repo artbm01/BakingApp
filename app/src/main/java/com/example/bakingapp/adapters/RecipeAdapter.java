@@ -12,28 +12,31 @@ import com.example.bakingapp.R;
 import com.example.bakingapp.models.Recipe;
 import com.example.bakingapp.utils.JsonUtils;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder>{
 
-    private final ArrayList<Recipe> recipes;
+    private ArrayList<Recipe> recipes;
     private final ListItemClickListener listItemClickListener;
 
     public RecipeAdapter(Context context, ListItemClickListener listItemClickListener){
         this.listItemClickListener = listItemClickListener;
-        String jsonString = JsonUtils.loadJSONFromAsset(context);
-        recipes = JsonUtils.parseJsonRecipes(jsonString);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private final TextView recipeTitle;
-        private final TextView quantity;
+        @BindView (R.id.rv_recipe_name_tv) TextView recipeTitle;
+        @BindView(R.id.rv_servings_quantity_tv) TextView quantity;
 
         private MyViewHolder(View itemView) {
             super(itemView);
-            recipeTitle = itemView.findViewById(R.id.rv_recipe_name_tv);
-            quantity = itemView.findViewById(R.id.rv_servings_quantity_tv);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
@@ -65,6 +68,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
     public interface ListItemClickListener{
         void onListItemClick(Recipe recipe);
+    }
+
+    public void setAdapterData(ArrayList<Recipe> recipes){
+        this.recipes = recipes;
     }
 }
 

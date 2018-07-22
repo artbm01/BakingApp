@@ -15,12 +15,15 @@ import com.example.bakingapp.models.Ingredient;
 import com.example.bakingapp.models.Recipe;
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailActivity extends AppCompatActivity implements DetailAdapter.ListItemClickListener{
 
     private Boolean twoPane=false;
     private Recipe recipe;
-    private TextView ingredientTextView;
-    private RecyclerView recyclerView;
+    @BindView(R.id.detail_ingredients_tv) TextView ingredientTextView;
+    @BindView(R.id.rv_details_list) RecyclerView recyclerView;
     private int stepId=0;
     private StepFragment fragment;
 
@@ -28,8 +31,7 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        ingredientTextView = findViewById(R.id.detail_ingredients_tv);
-        recyclerView = findViewById(R.id.rv_details_list);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         if(intent.hasExtra(getResources().getString(R.string.RECIPE_OBJECT))){

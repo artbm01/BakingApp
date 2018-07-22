@@ -1,7 +1,10 @@
 package com.example.bakingapp.utils;
 
 import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
 
+import com.example.bakingapp.R;
 import com.example.bakingapp.models.Ingredient;
 import com.example.bakingapp.models.Recipe;
 import com.example.bakingapp.models.Step;
@@ -11,7 +14,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class JsonUtils{
 
@@ -45,6 +52,17 @@ public class JsonUtils{
             return null;
         }
         return json;
+    }
+
+    public static URL getUrlJson(Context context) {
+        try {
+            URL jsonUrl = new URL(context.getString(R.string.STRING_URL));
+            return jsonUrl;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            Log.v("tester", "nothing to show");
+            return null;
+        }
     }
 
     public static ArrayList<Recipe> parseJsonRecipes(String json){
@@ -97,6 +115,26 @@ public class JsonUtils{
             }
         }
         else return null;
+    }
+
+    public static String getJsonResponseFromUrlRequest (URL url) throws IOException{
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        try {
+            InputStream in = urlConnection.getInputStream();
+
+            Scanner scanner = new Scanner(in);
+            scanner.useDelimiter("\\A");
+
+            boolean hasInput = scanner.hasNext();
+            String response = null;
+            if (hasInput) {
+                response = scanner.next();
+            }
+            scanner.close();
+            return response;
+        } finally {
+            urlConnection.disconnect();
+        }
     }
 
 }

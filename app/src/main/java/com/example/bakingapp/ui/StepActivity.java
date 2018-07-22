@@ -9,16 +9,21 @@ import android.widget.Button;
 import com.example.bakingapp.R;
 import com.example.bakingapp.models.Step;
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
 public class StepActivity extends AppCompatActivity {
 
     private ArrayList<Step> stepsList;
     private int id;
-    private Button nextButton;
-    private Button previousButton;
+    @BindView(R.id.next_button) Button nextButton;
+    @BindView(R.id.previous_button) Button previousButton;
     private String videoUrl;
     private String name;
+    StepFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +33,7 @@ public class StepActivity extends AppCompatActivity {
         name = getIntent().getStringExtra(getString(R.string.NAME));
         handleActionBar();
 
-        previousButton = findViewById(R.id.previous_button);
-        nextButton = findViewById(R.id.next_button);
+        ButterKnife.bind(this);
 
         if(savedInstanceState != null){
             id = savedInstanceState.getInt(getString(R.string.VIDEO_ID));
@@ -38,7 +42,11 @@ public class StepActivity extends AppCompatActivity {
         }
         stepsList = getIntent().getParcelableArrayListExtra(getResources().getString(R.string.STEPS_LIST));
 
-        StepFragment fragment = new StepFragment();
+        if (savedInstanceState == null) {
+            fragment = new StepFragment();
+        } else {
+            // do nothing - fragment is recreated automatically
+        }
         fragment.setStep(stepsList.get(id).getDescription());
         videoUrl = stepsList.get(id).getVideoUrl();
         Bundle b = shareVideoUrl();
@@ -56,6 +64,7 @@ public class StepActivity extends AppCompatActivity {
 
     public void OnClickNext(View v){
         id = id + 1;
+
         refreshView();
     }
     public void OnClickPrevious(View v){
