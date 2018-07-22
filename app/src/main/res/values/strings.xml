@@ -14,4 +14,6 @@
     <string name="PLAYBACK_POSITION">playback_position</string>
     <string name="PLAY_WHEN_READY">play_when_ready</string>
     <string name="STRING_URL">https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

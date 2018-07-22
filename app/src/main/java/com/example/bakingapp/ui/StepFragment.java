@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.bakingapp.R;
+import com.example.bakingapp.models.Step;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -23,6 +24,8 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +45,7 @@ public class StepFragment extends Fragment{
     Boolean resetPosition = true;
     @BindView(R.id.player_view) PlayerView playerView;
     @BindView(R.id.step_description_tv) TextView description;
+    Bundle bundleFromParentActivity;
 
     public StepFragment(){}
 
@@ -59,28 +63,36 @@ public class StepFragment extends Fragment{
             playWhenReady = true;
         }
 
-        getVideoUrl();
+        bundleFromParentActivity = getArguments();
+        int id = bundleFromParentActivity.getInt(getString(R.string.STEP_ID));
+        ArrayList<Step> steps = bundleFromParentActivity.getParcelableArrayList(getString(R.string.STEPS_LIST));
 
         View rootView = inflater.inflate(R.layout.fragment_step, container, false);
         unbinder = ButterKnife.bind(this,rootView);
 
         description.setVisibility(View.VISIBLE);
-        description.setText(descriptionText);
+        description.setText(steps.get(id).getDescription());
+
+        videoUrl = steps.get(id).getVideoUrl();
 
         if ((videoUrl == "") || videoUrl.trim().isEmpty()){
+            playerView.setVisibility(View.GONE);
         } else {
             playerView.setVisibility(View.VISIBLE);
 
             if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
-                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) playerView.getLayoutParams();
-                params.width = params.MATCH_PARENT;
-                params.height = params.MATCH_PARENT;
-                playerView.setLayoutParams(params);
+                setPlayerFullScreen();
             }
-
             startPlayer();
         }
         return rootView;
+    }
+
+    private void setPlayerFullScreen() {
+        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) playerView.getLayoutParams();
+        params.width = params.MATCH_PARENT;
+        params.height = params.MATCH_PARENT;
+        playerView.setLayoutParams(params);
     }
 
     public void setStep(String descriptionText){
@@ -93,7 +105,6 @@ public class StepFragment extends Fragment{
                 new DefaultTrackSelector(), new DefaultLoadControl());
 
         playerView.setPlayer(player);
-
         player.setPlayWhenReady(playWhenReady);
         player.seekTo(currentWindow, playbackPosition);
         Uri uri = Uri.parse(videoUrl);
@@ -102,7 +113,7 @@ public class StepFragment extends Fragment{
     }
     private MediaSource buildMediaSource(Uri uri) {
         return new ExtractorMediaSource.Factory(
-                new DefaultHttpDataSourceFactory("exoplayer-codelab")).
+                new DefaultHttpDataSourceFactory("exoplayer")).
                 createMediaSource(uri);
     }
 
@@ -111,6 +122,9 @@ public class StepFragment extends Fragment{
             playbackPosition = player.getCurrentPosition();
             currentWindow = player.getCurrentWindowIndex();
             playWhenReady = player.getPlayWhenReady();
+            player.setPlayWhenReady(false);
+            player.stop();
+            player.seekTo(0);
             player.release();
             player = null;
         }
@@ -156,11 +170,6 @@ public class StepFragment extends Fragment{
         }
     }
 
-    private void getVideoUrl(){
-        Bundle b = getArguments();
-        videoUrl = b.getString(getString(R.string.VIDEO_URL));
-    }
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putLong(getString(R.string.PLAYBACK_POSITION),playbackPosition);
@@ -172,7 +181,7 @@ public class StepFragment extends Fragment{
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState!=null){
             playWhenReady = savedInstanceState.getBoolean(getString(R.string.PLAY_WHEN_READY));
-            playbackPosition = savedInstanceState.getLong(getString(R.string.PLAYBACK_POSITION));
+            //playbackPosition = savedInstanceState.getLong(getString(R.string.PLAYBACK_POSITION));
         }
         super.onViewStateRestored(savedInstanceState);
     }

@@ -34,10 +34,10 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        if(intent.hasExtra(getResources().getString(R.string.RECIPE_OBJECT))){
+        if(intent.hasExtra(getString(R.string.RECIPE_OBJECT))){
             Bundle bundle = intent.getExtras();
             if (bundle!=null){
-                recipe = bundle.getParcelable(getResources().getString(R.string.RECIPE_OBJECT));
+                recipe = bundle.getParcelable(getString(R.string.RECIPE_OBJECT));
                 handleActionBar();
                 setIngredients();
                 setSteps();
@@ -82,9 +82,10 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
     public void onListItemClick(int id) {
         if(!twoPane){
             Intent intentToEnterStep = new Intent(this,StepActivity.class);
-            intentToEnterStep.putParcelableArrayListExtra(getResources().getString(R.string.STEPS_LIST), recipe.getSteps());
-            intentToEnterStep.putExtra(getResources().getString(R.string.STEP_ID), id);
-            intentToEnterStep.putExtra(getResources().getString(R.string.NAME), recipe.getName());
+            Bundle b = new Bundle();
+            b.putParcelable(getString(R.string.RECIPE_OBJECT), recipe);
+            intentToEnterStep.putExtras(b);
+            intentToEnterStep.putExtra(getString(R.string.STEP_ID), id);
             startActivity(intentToEnterStep);
         }
         else {

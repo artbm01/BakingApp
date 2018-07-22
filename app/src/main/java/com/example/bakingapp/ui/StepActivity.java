@@ -1,5 +1,6 @@
 package com.example.bakingapp.ui;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import com.example.bakingapp.R;
+import com.example.bakingapp.models.Recipe;
 import com.example.bakingapp.models.Step;
 import java.util.ArrayList;
 
@@ -17,54 +19,52 @@ import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
 public class StepActivity extends AppCompatActivity {
 
-    private ArrayList<Step> stepsList;
+    private Recipe recipe;
+    private Bundle bundleFromDetail;
     private int id;
     @BindView(R.id.next_button) Button nextButton;
     @BindView(R.id.previous_button) Button previousButton;
     private String videoUrl;
-    private String name;
     StepFragment fragment;
+    private Bundle bundleForFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step);
 
-        name = getIntent().getStringExtra(getString(R.string.NAME));
-        handleActionBar();
-
         ButterKnife.bind(this);
 
+        Intent intentThatCreatedActivity = getIntent();
+        if (intentThatCreatedActivity.hasExtra(getString(R.string.RECIPE_OBJECT))){
+            bundleFromDetail = intentThatCreatedActivity.getExtras();
+            recipe = bundleFromDetail.getParcelable(getString(R.string.RECIPE_OBJECT));
+        }
         if(savedInstanceState != null){
             id = savedInstanceState.getInt(getString(R.string.VIDEO_ID));
         } else{
-            id = getIntent().getIntExtra(getResources().getString(R.string.STEP_ID),0);
+            if(intentThatCreatedActivity.hasExtra(getString(R.string.STEP_ID))){
+                id = intentThatCreatedActivity.getIntExtra(getString(R.string.STEP_ID),0);
+            }
         }
-        stepsList = getIntent().getParcelableArrayListExtra(getResources().getString(R.string.STEPS_LIST));
+
+        handleActionBar();
 
         if (savedInstanceState == null) {
             fragment = new StepFragment();
-        } else {
-            // do nothing - fragment is recreated automatically
         }
-        fragment.setStep(stepsList.get(id).getDescription());
-        videoUrl = stepsList.get(id).getVideoUrl();
-        Bundle b = shareVideoUrl();
-        fragment.setArguments(b);
+
+        bundleForFragment = new Bundle();
+        bundleForFragment.putInt(getString(R.string.STEP_ID), id);
+        bundleForFragment.putParcelableArrayList(getString(R.string.STEPS_LIST),recipe.getSteps());
+        fragment.setArguments(bundleForFragment);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.step_fragment, fragment).commit();
-
         prepareButtons();
-
-        if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE){
-            hideButtons();
-            getSupportActionBar().hide();
-        }
     }
 
     public void OnClickNext(View v){
         id = id + 1;
-
         refreshView();
     }
     public void OnClickPrevious(View v){
@@ -73,18 +73,18 @@ public class StepActivity extends AppCompatActivity {
     }
 
     private void refreshView(){
-        StepFragment newFragment = new StepFragment();
-        newFragment.setStep(stepsList.get(id).getDescription());
-        videoUrl = stepsList.get(id).getVideoUrl();
-        Bundle b = shareVideoUrl();
-        newFragment.setArguments(b);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.step_fragment, newFragment).commit();
+        fragmentManager.beginTransaction().remove(fragment).commitNow();
+        fragment.onStop();
+        fragment.onPause();
+        bundleForFragment.putInt(getString(R.string.STEP_ID), id);
+        fragment.setArguments(bundleForFragment);
+        fragmentManager.beginTransaction().add(R.id.step_fragment, fragment).commit();
         prepareButtons();
     }
 
     private void prepareButtons(){
-        if(stepsList.size()-1 == id){
+        if(recipe.getSteps().size()-1 == id){
             nextButton.setVisibility(View.GONE);
             previousButton.setVisibility(View.VISIBLE);
         }
@@ -95,18 +95,10 @@ public class StepActivity extends AppCompatActivity {
         else{
             nextButton.setVisibility(View.VISIBLE);
             previousButton.setVisibility(View.VISIBLE);
+        } if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE){
+            previousButton.setVisibility(View.GONE);
+            nextButton.setVisibility(View.GONE);
         }
-    }
-
-    private void hideButtons(){
-        previousButton.setVisibility(View.GONE);
-        nextButton.setVisibility(View.GONE);
-    }
-
-    private Bundle shareVideoUrl(){
-        Bundle bundle = new Bundle();
-        bundle.putString(getString(R.string.VIDEO_URL),videoUrl);
-        return bundle;
     }
 
     @Override
@@ -118,7 +110,7 @@ public class StepActivity extends AppCompatActivity {
     private void handleActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(name);
+            actionBar.setTitle(recipe.getName());
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
