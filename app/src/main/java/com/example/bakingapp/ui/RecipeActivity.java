@@ -32,7 +32,6 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.L
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.v("tester","oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recipe_activity);
 
@@ -75,7 +74,6 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.L
                 URL jsonUrl = JsonUtils.getUrlJson(RecipeActivity.this);
                 try {
                     json = JsonUtils.getJsonResponseFromUrlRequest(jsonUrl);
-                    Log.v("tester",json);
                     return JsonUtils.parseJsonRecipes(json);
                 } catch (IOException e) {
                     e.printStackTrace();

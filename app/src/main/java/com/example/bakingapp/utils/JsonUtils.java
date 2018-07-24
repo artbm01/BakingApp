@@ -60,7 +60,6 @@ public class JsonUtils{
             return jsonUrl;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            Log.v("tester", "nothing to show");
             return null;
         }
     }
