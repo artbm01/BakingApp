@@ -13,6 +13,8 @@ import com.example.bakingapp.R;
 import com.example.bakingapp.adapters.DetailAdapter;
 import com.example.bakingapp.models.Ingredient;
 import com.example.bakingapp.models.Recipe;
+import com.example.bakingapp.models.Step;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -47,11 +49,10 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
         if (findViewById(R.id.details_frame_layout) != null){
             twoPane = true;
             fragment = new StepFragment();
-            String description = recipe.getSteps().get(stepId).getDescription();
-            fragment.setStep(description);
-            Bundle bundle = new Bundle();
-            bundle.putString(getString(R.string.VIDEO_URL),recipe.getSteps().get(stepId).getVideoUrl());
-            fragment.setArguments(bundle);
+            Bundle bundleForFragment = new Bundle();
+            bundleForFragment.putInt(getString(R.string.STEP_ID), stepId);
+            bundleForFragment.putParcelableArrayList(getString(R.string.STEPS_LIST),recipe.getSteps());
+            fragment.setArguments(bundleForFragment);
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().add(R.id.details_frame_layout, fragment).commit();
         }
@@ -89,13 +90,12 @@ public class DetailActivity extends AppCompatActivity implements DetailAdapter.L
             startActivity(intentToEnterStep);
         }
         else {
-            this.stepId = id;
-            String description = recipe.getSteps().get(stepId).getDescription();
             StepFragment newFragment = new StepFragment();
-            newFragment.setStep(description);
-            Bundle bundle = new Bundle();
-            bundle.putString(getString(R.string.VIDEO_URL),recipe.getSteps().get(stepId).getVideoUrl());
-            newFragment.setArguments(bundle);
+            this.stepId = id;
+            Bundle bundleForFragment = new Bundle();
+            bundleForFragment.putInt(getString(R.string.STEP_ID), stepId);
+            bundleForFragment.putParcelableArrayList(getString(R.string.STEPS_LIST),recipe.getSteps());
+            newFragment.setArguments(bundleForFragment);
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.details_frame_layout, newFragment).commit();
         }

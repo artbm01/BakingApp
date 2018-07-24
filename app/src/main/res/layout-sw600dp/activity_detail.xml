@@ -12,6 +12,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/ingredient_tv_tag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/ingredient_tv"
@@ -31,7 +32,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_details_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"/>
 
     </LinearLayout>
 
